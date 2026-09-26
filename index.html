@@ -1,82 +1,252 @@
 <!DOCTYPE html>
-<html>
+<html lang="et">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
-  body { margin: 0; background: #ffffff; -webkit-font-smoothing: antialiased; }
-  a { color: #1F4E9C; text-decoration: none; }
-  a:hover { color: #F5C518; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { margin: 0; background: #ffffff; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  #dc-root, #dc-root > .sc-host { height: auto !important; min-height: 100%; }
+  a { color: #151515; text-decoration: none; }
+  a:hover { color: #52e000; }
+  h1, h2, h3, p { overflow-wrap: break-word; }
+  img { max-width: 100%; }
+  .nav-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    flex: none;
+  }
+  .nav-burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #151515;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid #10e826; outline-offset: 2px; }
+  .nav-toggle:checked ~ .nav-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle:checked ~ .nav-burger span:nth-child(2) { opacity: 0; }
+  .nav-toggle:checked ~ .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important; }
+  .trade-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)) !important; }
+  .work-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important; }
+  .contact-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)) !important; }
+  .form-row { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)) !important; }
+  .footer-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important; }
+  .cards > *, .trade-grid > *, .work-grid > *, .contact-grid > *, .feature-split > *, .footer-grid > * { min-width: 0; }
+  .contact-value { overflow-wrap: anywhere; }
+
+  @media (min-width: 1101px) {
+    .nav-toggle { display: none; }
+  }
+
+  @media (max-width: 1100px) {
+    :root { --header-h: calc(56px + max(12px, env(safe-area-inset-top))); }
+    .hero { overflow: visible !important; }
+    #teenused, #ehitus, #kontakt { scroll-margin-top: calc(var(--header-h) + 8px); }
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      flex-wrap: nowrap !important;
+      gap: 12px !important;
+      padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left)) !important;
+    }
+    .logo { height: 36px !important; }
+    .nav-burger { display: flex; }
+    .site-nav {
+      display: none !important;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: calc(100dvh - 68px);
+      overflow: auto;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 0 !important;
+      padding: 4px max(16px, env(safe-area-inset-right)) 18px max(16px, env(safe-area-inset-left));
+      background: #ffffff;
+      box-shadow: 0 18px 40px rgba(14, 27, 46, 0.14);
+    }
+    .nav-toggle:checked ~ .site-nav { display: flex !important; }
+    .site-nav a {
+      padding: 15px 2px !important;
+      border-bottom: 1px solid #E8EDF3;
+      font-size: 16px !important;
+    }
+    .site-nav a.nav-cta {
+      margin-top: 14px;
+      justify-content: center;
+      border-bottom: none;
+      min-height: 48px;
+      padding: 14px 24px !important;
+    }
+    body:has(#nav-toggle:checked) { overflow: hidden; }
+  }
+
+  @media (max-width: 900px) {
+    .hero, .hero-body { min-height: 0 !important; }
+    .hero-scrim {
+      background: linear-gradient(180deg, rgba(14,27,46,0.5) 0%, rgba(14,27,46,0.78) 40%, rgba(14,27,46,0.92) 100%) !important;
+    }
+    .hero-copy { padding: calc(var(--header-h) + 36px) 24px 48px !important; }
+    .hero-title { font-size: clamp(36px, 11vw, 64px) !important; }
+    .hero-lead { font-size: 17px !important; margin-bottom: 28px !important; }
+    .kicker { margin-bottom: 18px !important; }
+    .kicker span:last-child { font-size: 12px !important; letter-spacing: 0.1em !important; line-height: 1.35; }
+    .display { font-size: clamp(34px, 7vw, 48px) !important; }
+    .stats { grid-template-columns: 1fr 1fr !important; }
+    .stats > div {
+      padding: 24px 20px !important;
+      border-right: none !important;
+      border-bottom: 1px solid rgba(255,255,255,0.16);
+    }
+    .stats > div:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.16) !important; }
+    .stats > div:nth-child(n+3) { border-bottom: none !important; }
+    .stats > div > div:first-child { font-size: 36px !important; }
+    .stats > div > div:last-child { font-size: 12px !important; letter-spacing: 0.05em !important; }
+    .section { padding: 64px 24px 72px !important; }
+    .section-head { margin-bottom: 32px !important; gap: 16px !important; }
+    .section-head > p, .section-lead { font-size: 16px !important; }
+    .feature-split { grid-template-columns: 1fr !important; }
+    .feature-photo { min-height: 300px !important; }
+    .feature-caption,
+    .feature-side-caption {
+      position: absolute !important;
+      inset: 0;
+      height: auto !important;
+    }
+    .feature-caption { padding: 28px 22px !important; }
+    .feature-caption > div:last-child { font-size: 32px !important; }
+    .feature-side-caption { padding: 24px 20px !important; }
+    .feature-side-caption > div { font-size: 26px !important; }
+    .feature-note { padding: 28px 22px !important; }
+    .contact-grid { gap: 40px !important; }
+    .contact-value { font-size: clamp(22px, 6.4vw, 32px) !important; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-copy { padding: calc(var(--header-h) + 28px) max(16px, env(safe-area-inset-right)) 32px max(16px, env(safe-area-inset-left)) !important; }
+    .hero-actions {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 12px !important;
+    }
+    .hero-actions a {
+      box-sizing: border-box;
+      justify-content: center;
+      min-height: 52px;
+      height: auto !important;
+      padding: 14px 18px !important;
+      text-align: center;
+    }
+    .section { padding: 52px max(16px, env(safe-area-inset-right)) 60px max(16px, env(safe-area-inset-left)) !important; }
+    .cards > div { padding: 28px 20px 30px !important; }
+    .trade-grid > div { padding: 26px 18px 28px !important; }
+    .work-photo { height: 220px !important; }
+    .form-card { padding: 28px 16px 32px !important; }
+    .form-card button { width: 100%; }
+    .footer {
+      padding: 44px max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)) !important;
+    }
+    .footer-grid { gap: 28px !important; padding-bottom: 32px !important; }
+  }
 </style>
 </helmet>
 
-<div style="position:relative; width:100%; min-height:820px; overflow:hidden; background:#0E1B2E; font-family:Barlow, Helvetica, Arial, sans-serif">
+<div class="hero" style="position:relative; width:100%; min-height:820px; overflow:hidden; background:#0E1B2E; font-family:Barlow, Helvetica, Arial, sans-serif">
 
   <div style="position:absolute; inset:0">
-    <img src="assets/1-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Hero background">
+    <img src="assets/1-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Hero background" fetchpriority="high" decoding="async">
   </div>
 
-  <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(100deg, rgba(14,27,46,0.92) 0%, rgba(14,27,46,0.78) 42%, rgba(14,27,46,0.25) 78%, rgba(14,27,46,0.1) 100%)"></div>
+  <div class="hero-scrim" style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(100deg, rgba(14,27,46,0.92) 0%, rgba(14,27,46,0.78) 42%, rgba(14,27,46,0.25) 78%, rgba(14,27,46,0.1) 100%)"></div>
 
-  <div style="position:relative; display:flex; flex-direction:column; min-height:820px; pointer-events:none">
+  <div class="hero-body" style="position:relative; display:flex; flex-direction:column; min-height:820px; pointer-events:none">
 
-    <header style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px 32px; padding:22px 40px; background:#ffffff; pointer-events:auto">
-      <img src="assets/estmi-logo.png" alt="ESTMI" style="height:44px; width:auto; display:block; flex:none">
-      <nav style="display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; min-width:0">
-        <a href="#" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#1F4E9C">Teenused</a>
-        <a href="#" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#1F4E9C">Päikesepargid</a>
-        <a href="#" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#1F4E9C">Ehitus</a>
-        <a href="#" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#1F4E9C">Tööd</a>
-        <a href="#" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#1F4E9C">Kontakt</a>
-        <a href="#" style="display:inline-flex; align-items:center; white-space:nowrap; flex:none; padding:14px 24px; background:#F5C518; color:#0E1B2E; font-size:15px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase" style-hover="background:#1F4E9C; color:#ffffff">Küsi pakkumist</a>
+    <header class="site-header" style="position:relative; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px 32px; padding:22px 40px; background:#ffffff; pointer-events:auto">
+      <img class="logo" src="assets/estmi-logo-1.png" alt="ESTMI" style="height:44px; width:auto; display:block; flex:none">
+      <input class="nav-toggle" id="nav-toggle" type="checkbox" aria-label="Menüü">
+      <label class="nav-burger" for="nav-toggle" aria-label="Ava menüü">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      <nav class="site-nav" style="display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; min-width:0">
+        <a href="#teenused" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#151515">Teenused</a>
+        <a href="#teenused" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#151515">Päikesepargid</a>
+        <a href="#ehitus" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#151515">Ehitus</a>
+        <a href="#ehitus" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#151515">Tööd</a>
+        <a href="#kontakt" style="font-size:15px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:#151515">Kontakt</a>
+        <a class="nav-cta" href="#kontakt" style="display:inline-flex; align-items:center; white-space:nowrap; flex:none; padding:14px 24px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%); color:#0E1B2E; font-size:15px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase" style-hover="background:#151515; color:#ffffff">Küsi pakkumist</a>
       </nav>
     </header>
 
-    <div style="flex:1; display:flex; align-items:center; padding:96px 64px 110px">
+    <div class="hero-copy" style="flex:1; display:flex; align-items:center; padding:96px 64px 110px">
       <div style="max-width:720px">
 
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px">
-          <span style="width:44px; height:4px; background:#F5C518"></span>
-          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#F5C518">Päikeseenergia &amp; ehitus · Eesti</span>
+        <div class="kicker" style="display:flex; align-items:center; gap:14px; margin-bottom:28px">
+          <span style="width:44px; height:4px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#52e000">Päikeseenergia &amp; ehitus · Eesti</span>
         </div>
 
-        <h1 style="margin:0 0 26px; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:82px; line-height:0.96; letter-spacing:-0.01em; color:#ffffff; text-wrap:balance">Päikeseenergia,<br>mis tasub end ära</h1>
+        <h1 class="hero-title" style="margin:0 0 26px; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:82px; line-height:0.96; letter-spacing:-0.01em; color:#ffffff; text-wrap:balance">Päikeseenergia,<br>mis tasub end ära</h1>
 
-        <p style="margin:0 0 44px; max-width:540px; font-size:20px; line-height:1.55; color:rgba(255,255,255,0.78); text-wrap:pretty">Projekteerime ja paigaldame päikesepaneele era- ja ärikinnistutele üle Eesti. Ühest kohast: mõõdistus, taotlused, paigaldus ja hooldus.</p>
+        <p class="hero-lead" style="margin:0 0 44px; max-width:540px; font-size:20px; line-height:1.55; color:rgba(255,255,255,0.78); text-wrap:pretty">Projekteerime ja paigaldame päikesepaneele era- ja ärikinnistutele üle Eesti. Ühest kohast: mõõdistus, taotlused, paigaldus ja hooldus.</p>
 
-        <div style="display:flex; align-items:center; gap:18px; pointer-events:auto">
-          <a href="#" style="display:inline-flex; align-items:center; height:60px; padding:0 36px; background:#F5C518; color:#0E1B2E; font-size:16px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase" style-hover="background:#ffffff">Tasuta hinnapakkumine</a>
-          <a href="#" style="display:inline-flex; align-items:center; height:60px; padding:0 32px; border:2px solid rgba(255,255,255,0.35); color:#ffffff; font-size:16px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase" style-hover="border-color:#F5C518; color:#F5C518">Vaata töid</a>
+        <div class="hero-actions" style="display:flex; align-items:center; gap:18px; pointer-events:auto">
+          <a href="#kontakt" style="display:inline-flex; align-items:center; height:60px; padding:0 36px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%); color:#0E1B2E; font-size:16px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase" style-hover="background:#ffffff">Tasuta hinnapakkumine</a>
+          <a href="#ehitus" style="display:inline-flex; align-items:center; height:60px; padding:0 32px; border:2px solid rgba(255,255,255,0.35); color:#ffffff; font-size:16px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase" style-hover="border-color:#52e000; color:#52e000">Vaata töid</a>
         </div>
 
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); background:rgba(31,78,156,0.92); backdrop-filter:blur(2px)">
+    <div class="stats" style="display:grid; grid-template-columns:repeat(4, 1fr); background: linear-gradient(rgba(21,21,21,0.85), rgba(21,21,21,0.85)), url('assets/stats-bg-1.webp') center/cover no-repeat; backdrop-filter:blur(2px)">
       <div style="padding:30px 40px; border-right:1px solid rgba(255,255,255,0.16)">
-        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#F5C518">12 a</div>
+        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#52e000">12 a</div>
         <div style="margin-top:8px; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.75)">Kogemus valdkonnas</div>
       </div>
       <div style="padding:30px 40px; border-right:1px solid rgba(255,255,255,0.16)">
-        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#F5C518">480+</div>
+        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#52e000">480+</div>
         <div style="margin-top:8px; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.75)">Paigaldatud objekti</div>
       </div>
       <div style="padding:30px 40px; border-right:1px solid rgba(255,255,255,0.16)">
-        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#F5C518">10 a</div>
+        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#52e000">10 a</div>
         <div style="margin-top:8px; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.75)">Garantii paigaldusele</div>
       </div>
       <div style="padding:30px 40px">
-        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#F5C518">2–4 n</div>
+        <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:44px; font-weight:700; line-height:1; color:#52e000">2–4 n</div>
         <div style="margin-top:8px; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.75)">Tellimusest valmis</div>
       </div>
     </div>
@@ -84,58 +254,58 @@
   </div>
 </div>
 
-<section style="background:#ffffff; padding:104px 40px 112px; font-family:Barlow, Helvetica, Arial, sans-serif">
+<section id="teenused" class="section" style="background:#ffffff; padding:104px 40px 112px; font-family:Barlow, Helvetica, Arial, sans-serif">
   <div style="max-width:1280px; margin:0 auto">
 
-    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:28px; margin-bottom:56px">
+    <div class="section-head" style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:28px; margin-bottom:56px">
       <div style="max-width:640px">
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
-          <span style="width:44px; height:4px; background:#F5C518"></span>
-          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#1F4E9C">Teenused ja päikesepargid</span>
+        <div class="kicker" style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
+          <span style="width:44px; height:4px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#151515">Teenused ja päikesepargid</span>
         </div>
-        <h2 style="margin:0; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:58px; line-height:1; letter-spacing:-0.01em; color:#0E1B2E; text-wrap:balance">Terviklahendus katusest võrguni</h2>
+        <h2 class="display" style="margin:0; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:58px; line-height:1; letter-spacing:-0.01em; color:#0E1B2E; text-wrap:balance">Terviklahendus katusest võrguni</h2>
       </div>
       <p style="margin:0; max-width:420px; font-size:18px; line-height:1.6; color:#4A5768; text-wrap:pretty">Teeme kõik etapid ise — nii ühe kodu katusel kui hektaritel põllul. Üks leping, üks vastutaja, üks garantii.</p>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:2px; background:#E4E8EF; margin-bottom:2px">
+    <div class="cards" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:2px; background:#E4E8EF; margin-bottom:2px">
       <div style="background:#ffffff; padding:38px 34px 40px">
         <div style="display:flex; gap:3px; margin-bottom:26px">
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
-          <span style="width:9px; height:34px; background:#F5C518"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
+          <span style="width:9px; height:34px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
         </div>
         <h3 style="margin:0 0 12px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.1; color:#0E1B2E">Paneelide paigaldus</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:#4A5768">Era- ja kortermajad, laohooned. Katuse tüüp ei ole piirang: kiled, plekk, kivi, lamekatus.</p>
       </div>
       <div style="background:#ffffff; padding:38px 34px 40px">
         <div style="display:flex; gap:3px; margin-bottom:26px">
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
-          <span style="width:9px; height:34px; background:#F5C518"></span>
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
+          <span style="width:9px; height:34px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
         </div>
         <h3 style="margin:0 0 12px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.1; color:#0E1B2E">Päikesepargid</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:#4A5768">Maapealsed pargid 50 kW kuni 2 MW. Projekt, vundament, konstruktsioon, liitumine võrguga.</p>
       </div>
       <div style="background:#ffffff; padding:38px 34px 40px">
         <div style="display:flex; gap:3px; margin-bottom:26px">
-          <span style="width:9px; height:34px; background:#F5C518"></span>
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
-          <span style="width:9px; height:34px; background:#1F4E9C"></span>
+          <span style="width:9px; height:34px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
+          <span style="width:9px; height:34px; background:#151515"></span>
         </div>
         <h3 style="margin:0 0 12px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.1; color:#0E1B2E">Salvestus ja hooldus</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:#4A5768">Akulahendused, inverterite seadistus, pesu ja iga-aastane kontroll koos tootlikkuse raportiga.</p>
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:2px; background:#E4E8EF">
-      <div style="position:relative; min-height:440px; background:#0E1B2E">
+    <div class="feature-split" style="display:grid; grid-template-columns:1.15fr 1fr; gap:2px; background:#E4E8EF">
+      <div class="feature-photo" style="position:relative; min-height:440px; background:#0E1B2E">
         <div style="position:absolute; inset:0">
-          <img src="assets/2-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Solar park">
+          <img src="assets/2-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Solar park" loading="lazy" decoding="async">
         </div>
         <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(14,27,46,0.9) 0%, rgba(14,27,46,0.35) 45%, rgba(14,27,46,0) 75%)"></div>
-        <div style="position:relative; box-sizing:border-box; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding:40px; pointer-events:none">
-          <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#F5C518; margin-bottom:12px">Päikesepark · Jõgevamaa</div>
+        <div class="feature-caption" style="position:relative; box-sizing:border-box; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding:40px; pointer-events:none">
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#52e000; margin-bottom:12px">Päikesepark · Jõgevamaa</div>
           <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:40px; font-weight:700; line-height:1.02; color:#ffffff; max-width:420px">1,2 MW park kolme kuuga valmis</div>
         </div>
       </div>
@@ -143,16 +313,16 @@
       <div style="display:grid; grid-template-rows:1fr auto; gap:2px">
         <div style="position:relative; min-height:240px; background:#0E1B2E">
           <div style="position:absolute; inset:0">
-            <img src="assets/3-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="House roof panels">
+            <img src="assets/3-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="House roof panels" loading="lazy" decoding="async">
           </div>
           <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(14,27,46,0.85) 0%, rgba(14,27,46,0) 60%)"></div>
-          <div style="position:relative; box-sizing:border-box; height:100%; display:flex; align-items:flex-end; padding:32px; pointer-events:none">
+          <div class="feature-side-caption" style="position:relative; box-sizing:border-box; height:100%; display:flex; align-items:flex-end; padding:32px; pointer-events:none">
             <div style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:30px; font-weight:700; line-height:1.05; color:#ffffff">Eramu 14 kW · Harjumaa</div>
           </div>
         </div>
-        <div style="background:#1F4E9C; padding:36px 34px; display:flex; flex-direction:column; gap:22px">
+        <div class="feature-note" style="background:#151515; padding:36px 34px; display:flex; flex-direction:column; gap:22px">
           <p style="margin:0; font-size:19px; line-height:1.5; color:rgba(255,255,255,0.85)">Ei tea, kas katus sobib? Saada aadress — vastame tootlikkuse arvutusega kahe tööpäeva jooksul.</p>
-          <a href="#" style="display:inline-flex; align-self:flex-start; align-items:center; white-space:nowrap; padding:16px 30px; background:#F5C518; color:#0E1B2E; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase" style-hover="background:#ffffff">Küsi arvutust</a>
+          <a href="#kontakt" style="display:inline-flex; align-self:flex-start; align-items:center; white-space:nowrap; padding:16px 30px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%); color:#0E1B2E; font-size:15px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase" style-hover="background:#ffffff">Küsi arvutust</a>
         </div>
       </div>
     </div>
@@ -161,26 +331,26 @@
 </section>
 
 
-<section style="background:#0E1B2E; padding:104px 40px 112px; font-family:Barlow, Helvetica, Arial, sans-serif">
+<section id="ehitus" class="section" style="background: url('assets/portfolio-bg-1.webp') center/cover no-repeat; padding:104px 40px 112px; font-family:Barlow, Helvetica, Arial, sans-serif">
   <div style="max-width:1280px; margin:0 auto">
 
-    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:28px; margin-bottom:56px">
+    <div class="section-head" style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:28px; margin-bottom:56px">
       <div style="max-width:660px">
-        <div style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
-          <span style="width:44px; height:4px; background:#F5C518"></span>
-          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#F5C518">Ehitus ja tehtud tööd</span>
+        <div class="kicker" style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
+          <span style="width:44px; height:4px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#52e000">Ehitus ja tehtud tööd</span>
         </div>
-        <h2 style="margin:0; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:58px; line-height:1; letter-spacing:-0.01em; color:#ffffff; text-wrap:balance">Katusest vundamendini — sama brigaad</h2>
+        <h2 class="display" style="margin:0; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:58px; line-height:1; letter-spacing:-0.01em; color:#ffffff; text-wrap:balance">Katusest vundamendini — sama brigaad</h2>
       </div>
-      <a href="#" style="display:inline-flex; align-items:center; white-space:nowrap; padding:16px 30px; border:2px solid rgba(255,255,255,0.35); color:#ffffff; font-size:15px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase" style-hover="border-color:#F5C518; color:#F5C518">Kõik tööd</a>
+      <a href="#" style="display:inline-flex; align-items:center; white-space:nowrap; padding:16px 30px; border:2px solid rgba(255,255,255,0.35); color:#ffffff; font-size:15px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase" style-hover="border-color:#52e000; color:#52e000">Kõik tööd</a>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2px; background:rgba(255,255,255,0.14); margin-bottom:64px">
+    <div class="trade-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2px; background:rgba(255,255,255,0.14); margin-bottom:64px">
       <div style="background:#0E1B2E; padding:34px 32px 38px; display:flex; gap:20px">
         <div style="display:flex; flex-direction:column; gap:3px; flex:none; padding-top:6px">
-          <span style="width:30px; height:7px; background:#F5C518"></span>
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
+          <span style="width:30px; height:7px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
         </div>
         <div>
           <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:26px; font-weight:700; line-height:1.1; color:#ffffff">Katusetööd</h3>
@@ -189,9 +359,9 @@
       </div>
       <div style="background:#0E1B2E; padding:34px 32px 38px; display:flex; gap:20px">
         <div style="display:flex; flex-direction:column; gap:3px; flex:none; padding-top:6px">
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
-          <span style="width:30px; height:7px; background:#F5C518"></span>
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
+          <span style="width:30px; height:7px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
         </div>
         <div>
           <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:26px; font-weight:700; line-height:1.1; color:#ffffff">Vundament ja pinnasetööd</h3>
@@ -200,9 +370,9 @@
       </div>
       <div style="background:#0E1B2E; padding:34px 32px 38px; display:flex; gap:20px">
         <div style="display:flex; flex-direction:column; gap:3px; flex:none; padding-top:6px">
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
-          <span style="width:30px; height:7px; background:#1F4E9C"></span>
-          <span style="width:30px; height:7px; background:#F5C518"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
+          <span style="width:30px; height:7px; background:#151515"></span>
+          <span style="width:30px; height:7px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
         </div>
         <div>
           <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:26px; font-weight:700; line-height:1.1; color:#ffffff">Üldehitus ja renoveerimine</h3>
@@ -211,34 +381,34 @@
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:28px">
+    <div class="work-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:28px">
       <div>
-        <div style="position:relative; height:300px; background:#152742; margin-bottom:20px">
+        <div class="work-photo" style="position:relative; height:300px; background:#152742; margin-bottom:20px">
           <div style="position:absolute; inset:0">
-            <img src="assets/4-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Metal roof">
+            <img src="assets/4-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Metal roof" loading="lazy" decoding="async">
           </div>
         </div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#F5C518; margin-bottom:10px">Katus + 18 kW · Tartumaa</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#52e000; margin-bottom:10px">Katus + 18 kW · Tartumaa</div>
         <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.05; color:#ffffff">Katusevahetus ja paneelid ühe töögraafikuga</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.62)">Vana eterniit maha, uus plekk peale, paneelid samal nädalal. Kokku 21 päeva.</p>
       </div>
       <div>
-        <div style="position:relative; height:300px; background:#152742; margin-bottom:20px">
+        <div class="work-photo" style="position:relative; height:300px; background:#152742; margin-bottom:20px">
           <div style="position:absolute; inset:0">
-            <img src="assets/5-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Construction site">
+            <img src="assets/5-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Construction site" loading="lazy" decoding="async">
           </div>
         </div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#F5C518; margin-bottom:10px">Park 600 kW · Pärnumaa</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#52e000; margin-bottom:10px">Park 600 kW · Pärnumaa</div>
         <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.05; color:#ffffff">1 400 kruvivaia talvises pinnases</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.62)">Vundament ja konstruktsioon oma tehnikaga, ilma alltöövõtjateta.</p>
       </div>
       <div>
-        <div style="position:relative; height:300px; background:#152742; margin-bottom:20px">
+        <div class="work-photo" style="position:relative; height:300px; background:#152742; margin-bottom:20px">
           <div style="position:absolute; inset:0">
-            <img src="assets/1-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Warehouse">
+            <img src="assets/1-pic.jpg" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Warehouse" loading="lazy" decoding="async">
           </div>
         </div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#F5C518; margin-bottom:10px">Laohoone · Rae vald</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#52e000; margin-bottom:10px">Laohoone · Rae vald</div>
         <h3 style="margin:0 0 10px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:28px; font-weight:700; line-height:1.05; color:#ffffff">Fassaad, katus ja 90 kW tootmisvõimsust</h3>
         <p style="margin:0; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.62)">Objekt töötas remondi ajal edasi — tööd tehti etappide kaupa.</p>
       </div>
@@ -247,55 +417,55 @@
   </div>
 </section>
 
-<section style="background:#ffffff; padding:104px 40px 96px; font-family:Barlow, Helvetica, Arial, sans-serif">
-  <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:64px">
+<section id="kontakt" class="section" style="background:#ffffff; padding:104px 40px 96px; font-family:Barlow, Helvetica, Arial, sans-serif">
+  <div class="contact-grid" style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:64px">
 
     <div>
-      <div style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
-        <span style="width:44px; height:4px; background:#F5C518"></span>
-        <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#1F4E9C">Kontakt</span>
+      <div class="kicker" style="display:flex; align-items:center; gap:14px; margin-bottom:22px">
+        <span style="width:44px; height:4px; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%)"></span>
+        <span style="font-size:14px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:#151515">Kontakt</span>
       </div>
-      <h2 style="margin:0 0 24px; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:54px; line-height:1; letter-spacing:-0.01em; color:#0E1B2E; text-wrap:balance">Räägime teie objektist</h2>
-      <p style="margin:0 0 40px; max-width:440px; font-size:18px; line-height:1.6; color:#4A5768; text-wrap:pretty">Helistage või saatke aadress ja katuse foto — anname esialgse hinnavahemiku juba samal päeval.</p>
+      <h2 class="display" style="margin:0 0 24px; font-family:'Barlow Condensed', Barlow, sans-serif; font-weight:700; font-size:54px; line-height:1; letter-spacing:-0.01em; color:#0E1B2E; text-wrap:balance">Räägime teie objektist</h2>
+      <p class="section-lead" style="margin:0 0 40px; max-width:440px; font-size:18px; line-height:1.6; color:#4A5768; text-wrap:pretty">Helistage või saatke aadress ja katuse foto — anname esialgse hinnavahemiku juba samal päeval.</p>
 
       <div style="display:grid; gap:2px; background:#E4E8EF; max-width:480px">
         <div style="background:#ffffff; padding:20px 0">
           <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#8B95A5; margin-bottom:6px">Telefon</div>
-          <a href="tel:+37200000000" style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:32px; font-weight:700; color:#0E1B2E" style-hover="color:#1F4E9C">+372 000 0000</a>
+          <a class="contact-value" href="tel:+3725533178" style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:32px; font-weight:700; color:#0E1B2E" style-hover="color:#151515">+372 55 33 178</a>
         </div>
         <div style="background:#ffffff; padding:20px 0">
           <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#8B95A5; margin-bottom:6px">E-post</div>
-          <a href="mailto:info@estmi.ee" style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:32px; font-weight:700; color:#0E1B2E" style-hover="color:#1F4E9C">info@estmi.ee</a>
+          <a class="contact-value" href="mailto:estmiteenus@gmail.com" style="font-family:'Barlow Condensed', Barlow, sans-serif; font-size:32px; font-weight:700; color:#0E1B2E" style-hover="color:#151515">estmiteenus@gmail.com</a>
         </div>
         <div style="background:#ffffff; padding:20px 0">
           <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#8B95A5; margin-bottom:6px">Piirkond</div>
-          <div style="font-size:18px; line-height:1.5; color:#0E1B2E">Kogu Eesti · kontor Harjumaal</div>
+          <div style="font-size:18px; line-height:1.5; color:#0E1B2E">Juure tee 2-2, Tiskre küla, Harku vald, 76916</div>
         </div>
       </div>
     </div>
 
-    <div style="background:#F4F6F9; padding:40px 36px 44px">
+    <div class="form-card" style="background:#F4F6F9; padding:40px 36px 44px">
       <h3 style="margin:0 0 28px; font-family:'Barlow Condensed', Barlow, sans-serif; font-size:30px; font-weight:700; line-height:1.05; color:#0E1B2E">Küsi tasuta pakkumist</h3>
       <div style="display:grid; gap:16px">
         <div>
           <label style="display:block; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#6B7688; margin-bottom:8px">Nimi</label>
-          <input type="text" placeholder="Teie nimi" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#1F4E9C">
+          <input type="text" name="nimi" autocomplete="name" placeholder="Teie nimi" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#151515">
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:16px">
+        <div class="form-row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:16px">
           <div>
             <label style="display:block; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#6B7688; margin-bottom:8px">Telefon</label>
-            <input type="tel" placeholder="+372" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#1F4E9C">
+            <input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="+372" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#151515">
           </div>
           <div>
             <label style="display:block; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#6B7688; margin-bottom:8px">Objekti aadress</label>
-            <input type="text" placeholder="Linn, tänav" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#1F4E9C">
+            <input type="text" name="aadress" autocomplete="street-address" placeholder="Linn, tänav" style="box-sizing:border-box; width:100%; height:52px; padding:0 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; color:#0E1B2E; outline:none" style-focus="border-color:#151515">
           </div>
         </div>
         <div>
           <label style="display:block; font-size:13px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#6B7688; margin-bottom:8px">Mida plaanite</label>
-          <textarea rows="4" placeholder="Nt. eramu katus 120 m², soovin päikesepaneele ja katusevahetust" style="box-sizing:border-box; width:100%; padding:14px 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; line-height:1.5; color:#0E1B2E; outline:none; resize:vertical" style-focus="border-color:#1F4E9C"></textarea>
+          <textarea rows="4" placeholder="Nt. eramu katus 120 m², soovin päikesepaneele ja katusevahetust" style="box-sizing:border-box; width:100%; padding:14px 16px; border:1px solid #D6DCE5; background:#ffffff; font-family:Barlow, sans-serif; font-size:17px; line-height:1.5; color:#0E1B2E; outline:none; resize:vertical" style-focus="border-color:#151515"></textarea>
         </div>
-        <button type="button" style="margin-top:6px; padding:18px 30px; border:none; background:#F5C518; color:#0E1B2E; font-family:Barlow, sans-serif; font-size:16px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer" style-hover="background:#1F4E9C; color:#ffffff">Saada päring</button>
+        <button type="button" style="margin-top:6px; padding:18px 30px; border:none; background:linear-gradient(135deg, #b5ff00 0%, #10e826 100%); color:#0E1B2E; font-family:Barlow, sans-serif; font-size:16px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer" style-hover="background:#151515; color:#ffffff">Saada päring</button>
         <p style="margin:0; font-size:14px; line-height:1.5; color:#8B95A5">Vastame tööpäevadel 24 tunni jooksul. Andmeid ei jaga kolmandate osapooltega.</p>
       </div>
     </div>
@@ -303,49 +473,60 @@
   </div>
 </section>
 
-<footer style="background:#0E1B2E; padding:64px 40px 36px; font-family:Barlow, Helvetica, Arial, sans-serif">
+<footer class="footer" style="background: url('assets/estmi-footer.webp') center/cover no-repeat; padding:64px 40px 36px; font-family:Barlow, Helvetica, Arial, sans-serif">
   <div style="max-width:1280px; margin:0 auto">
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:44px; padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,0.14)">
+    <div class="footer-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:44px; padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,0.14)">
       <div>
-        <img src="assets/estmi-logo.png" alt="ESTMI" style="height:40px; width:auto; display:block; margin-bottom:20px; background:#ffffff; padding:8px 12px; box-sizing:content-box">
+        <img src="assets/estmi-logo-2.png" alt="ESTMI" style="height:40px; width:auto; display:block; margin-bottom:20px;">
         <p style="margin:0; max-width:280px; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.6)">ESTMI TEENUS OÜ · päikeseenergia ja ehitus üle Eesti alates 2014. aastast.</p>
       </div>
       <div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#F5C518; margin-bottom:18px">Teenused</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#52e000; margin-bottom:18px">Teenused</div>
         <div style="display:flex; flex-direction:column; gap:12px">
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Paneelide paigaldus</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Päikesepargid</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Katusetööd</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Hooldus</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Paneelide paigaldus</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Päikesepargid</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Katusetööd</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Hooldus</a>
         </div>
       </div>
       <div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#F5C518; margin-bottom:18px">Ettevõte</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#52e000; margin-bottom:18px">Ettevõte</div>
         <div style="display:flex; flex-direction:column; gap:12px">
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Tehtud tööd</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Meist</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Töökohad</a>
-          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">Kontakt</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Tehtud tööd</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Meist</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Töökohad</a>
+          <a href="#" style="font-size:16px; color:rgba(255,255,255,0.72)" style-hover="color:#52e000">Kontakt</a>
         </div>
       </div>
       <div>
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#F5C518; margin-bottom:18px">Rekvisiidid</div>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#52e000; margin-bottom:18px">Rekvisiidid</div>
         <div style="display:flex; flex-direction:column; gap:12px; font-size:16px; line-height:1.5; color:rgba(255,255,255,0.72)">
           <div>Reg. nr 16595142</div>
-          <a href="tel:+37200000000" style="color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">+372 000 0000</a>
-          <a href="mailto:info@estmi.ee" style="color:rgba(255,255,255,0.72)" style-hover="color:#F5C518">info@estmi.ee</a>
+          <a href="tel:+3725533178" style="color:rgba(255,255,255,0.72)" style-hover="color:#52e000">+372 55 33 178</a>
+          <a href="mailto:estmiteenus@gmail.com" style="color:rgba(255,255,255,0.72)" style-hover="color:#52e000">estmiteenus@gmail.com</a>
         </div>
       </div>
     </div>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding-top:26px">
       <div style="font-size:14px; color:rgba(255,255,255,0.45)">© 2026 ESTMI TEENUS OÜ. Kõik õigused kaitstud.</div>
       <div style="display:flex; gap:24px">
-        <a href="#" style="font-size:14px; color:rgba(255,255,255,0.45)" style-hover="color:#F5C518">Privaatsuspoliitika</a>
-        <a href="#" style="font-size:14px; color:rgba(255,255,255,0.45)" style-hover="color:#F5C518">Tingimused</a>
+        <a href="#" style="font-size:14px; color:rgba(255,255,255,0.45)" style-hover="color:#52e000">Privaatsuspoliitika</a>
+        <a href="#" style="font-size:14px; color:rgba(255,255,255,0.45)" style-hover="color:#52e000">Tingimused</a>
       </div>
     </div>
   </div>
 </footer>
 </x-dc>
+<script>
+document.addEventListener('click', function (e) {
+  var toggle = document.getElementById('nav-toggle');
+  if (!toggle || !toggle.checked) return;
+  if (e.target.closest && e.target.closest('.site-nav a')) {
+    toggle.checked = false;
+    return;
+  }
+  if (!e.target.closest || !e.target.closest('.site-header')) toggle.checked = false;
+});
+</script>
 </body>
 </html>
